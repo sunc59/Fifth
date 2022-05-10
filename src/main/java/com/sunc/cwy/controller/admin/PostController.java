@@ -59,6 +59,7 @@ public class PostController extends BaseController {
 
         } catch (Exception e) {
 
+            e.printStackTrace();
             setErrorTip("查询离岗申请异常", "main.jsp", session);
             return "infoTip";
         }
@@ -103,15 +104,28 @@ public class PostController extends BaseController {
                 currPage = pageNo;
             }
 
+            // 用户身份限制 1是普通用户 2是管理员
+            User admin = getAdmin(session);
+            if (admin.getUserType() == 1) {
+                // 普通用户只能查询自己的请假申请
+                paramsPost.setUserId(admin.getId());
+            }
+
+            // 查询离岗列表
             Page<Post> page = postService.listPosts(paramsPost, currPage, count);
 
             List<Post> posts = page.getRecords();
             // 填充部门和真实姓名数据
             for (Post post : posts) {
+
                 User user = userService.getUserById(post.getUserId());
-                Dept dept = deptService.getDeptById(user.getDeptId());
-                post.setRealName(user.getRealName());
-                post.setDeptName(dept.getDeptName());
+
+                if (!"admin".equals(user.getUserName())) {
+
+                    Dept dept = deptService.getDeptById(user.getDeptId());
+                    post.setRealName(user.getRealName());
+                    post.setDeptName(dept.getDeptName());
+                }
             }
 
             long totalCount = page.getTotal();
@@ -194,10 +208,11 @@ public class PostController extends BaseController {
             // TODO
 
             // 获取离岗申请
-            Post post = postService.getPost(id);
-            request.setAttribute("paramsPost", post);
+            Post post = postService.getPostById(id);
+            request.setAttribute("post", post);
 
         } catch (Exception e) {
+
             e.printStackTrace();
             setErrorTip("查询离岗申请异常", "listPosts", session);
             return "infoTip";
@@ -267,8 +282,6 @@ public class PostController extends BaseController {
      */
     @RequestMapping("/admin/addPost")
     public String addPost(Post paramsPost, HttpServletRequest request) {
-
-        System.out.println(paramsPost);
 
         HttpSession session = request.getSession();
 

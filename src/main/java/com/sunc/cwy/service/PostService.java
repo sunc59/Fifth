@@ -62,7 +62,7 @@ public class PostService {
      * @param id
      * @return
      */
-    public Post getPost(int id) {
+    public Post getPostById(int id) {
         return postMapper.selectById(id);
     }
 
@@ -150,35 +150,55 @@ public class PostService {
      */
     public Page<Post> listPosts(Post paramsPost, int currPage, int count) {
 
+        String postDate1 = paramsPost.getPostDate1();
+        String postDate2 = paramsPost.getPostDate2();
+        Integer postFlag = paramsPost.getPostFlag();
+        String realName = paramsPost.getRealName();
+        int deptId = paramsPost.getDeptId();
+        int userId = paramsPost.getUserId();
+
         QueryWrapper<Post> wrapper = new QueryWrapper<>();
 
+        if (userId != 0) {
+            wrapper.eq("user_id", userId);
+        }
+
         // 数据库中的日期要在两个日期中间
-        if (!StringUtil.isEmptyString(paramsPost.getPostDate1()) && !StringUtil.isEmptyString(paramsPost.getPostDate2())) {
-            wrapper.between("post_date1", paramsPost.getPostDate1(), paramsPost.getPostDate2());
+        if (!StringUtil.isEmptyString(postDate1) && !StringUtil.isEmptyString(postDate2)) {
+
+            wrapper.ge("post_date1", postDate1);
+            wrapper.le("post_date2", postDate2);
         }
 
         // 审核状态
-        if (paramsPost.getPostFlag() != null && paramsPost.getPostFlag() != 0) {
+        if (postFlag != null && postFlag != 0) {
             wrapper.eq("post_flag", paramsPost.getPostFlag());
         }
 
         // 管理员可以查询用户姓名
-        if (!StringUtil.isEmptyString(paramsPost.getRealName())) {
-            QueryWrapper<User> userWrapper = new QueryWrapper<>();
-            userWrapper.like("real_name", paramsPost.getRealName());
-            User user = userMapper.selectOne(userWrapper);
-            wrapper.eq("user_id", user.getId());
-        }
-        // 管理员可以查询用户部门
-        if (paramsPost.getDeptId() != 0) {
-            QueryWrapper<User> userWrapper = new QueryWrapper<>();
-            userWrapper.eq("dept_id", paramsPost.getDeptId());
-            List<User> users = userMapper.selectList(userWrapper);
-            List<Integer> userIds = new ArrayList<>();
-            for (User user : users) {
-                userIds.add(user.getId());
+        if (!StringUtil.isEmptyString(realName)) {
+            QueryWrapper<User> w = new QueryWrapper<>();
+            w.eq("real_name", realName);
+            User user = userMapper.selectOne(w);
+            if (user != null) {
+                wrapper.eq("user_id", user.getId());
+            } else {
+                wrapper.eq("user_id", -1);
             }
-            wrapper.in("user_id", userIds);
+        }
+
+        // 管理员可以查询用户部门
+        if (deptId != 0) {
+            QueryWrapper<User> w = new QueryWrapper<>();
+            w.eq("dept_id", deptId);
+            List<User> users = userMapper.selectList(w);
+            List<Integer> list = new ArrayList<>();
+            for (User user : users) {
+                list.add(user.getId());
+            }
+            if (list.size() > 0) {
+                wrapper.in("user_id", list);
+            }
         }
 
         if (currPage <= 0) {

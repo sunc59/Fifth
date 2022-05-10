@@ -70,12 +70,14 @@ public class DeptController extends BaseController {
             long totalCount = page.getTotal();
             long cPage = page.getCurrent();
             long pageCount = page.getPages();
+            long size = page.getSize();
 
             // 将参数存入session
             session.setAttribute("depts", depts);
             request.setAttribute("totalCount", totalCount);
             request.setAttribute("pageNo", cPage);
             request.setAttribute("pageCount", pageCount);
+            request.setAttribute("size", size);
 
             // 回填数据
             request.setAttribute("paramsDeptName", paramsDept.getDeptName());

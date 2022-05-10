@@ -132,10 +132,23 @@
 
                             <select id="paramsLeave.leave_type" name="leaveType"
                                     class="selectstyle" style="width: 155px">
+
                                 <option value="0">请选择</option>
-                                <option value="1">年假</option>
-                                <option value="2">病假</option>
-                                <option value="3">事假</option>
+                                <c:if test="${leave.leaveType == 1}">
+                                    <option value="1" selected>年假</option>
+                                    <option value="2">病假</option>
+                                    <option value="3">事假</option>
+                                </c:if>
+                                <c:if test="${leave.leaveType == 2}">
+                                    <option value="1">年假</option>
+                                    <option value="2" selected>病假</option>
+                                    <option value="3">事假</option>
+                                </c:if>
+                                <c:if test="${leave.leaveType == 3}">
+                                    <option value="1">年假</option>
+                                    <option value="2">病假</option>
+                                    <option value="3" selected>事假</option>
+                                </c:if>
                             </select>
 
                         </td>
@@ -154,9 +167,17 @@
                         <td>
                             <select id="paramsLeave.leave_lesson1" name="leaveLesson1"
                                     class="selectstyle" style="width: 155px">
+
                                 <option value="0">请选择</option>
-                                <option value="1">上午</option>
-                                <option value="2">下午</option>
+
+                                <c:if test="${leave.leaveLesson1 == 1}">
+                                    <option value="1" selected>上午</option>
+                                    <option value="2">下午</option>
+                                </c:if>
+                                <c:if test="${leave.leaveLesson1 == 2}">
+                                    <option value="1">上午</option>
+                                    <option value="2" selected>下午</option>
+                                </c:if>
                             </select>
                         </td>
                     </tr>
@@ -173,8 +194,15 @@
                             <select id="paramsLeave.leave_lesson2" name="leaveLesson2"
                                     class="selectstyle" style="width: 155px">
                                 <option value="0">请选择</option>
-                                <option value="1">上午</option>
-                                <option value="2">下午</option>
+
+                                <c:if test="${leave.leaveLesson2 == 1}">
+                                    <option value="1" selected>上午</option>
+                                    <option value="2">下午</option>
+                                </c:if>
+                                <c:if test="${leave.leaveLesson2 == 2}">
+                                    <option value="1">上午</option>
+                                    <option value="2" selected>下午</option>
+                                </c:if>
                             </select>
                         </td>
                     </tr>

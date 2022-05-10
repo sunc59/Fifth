@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -74,13 +75,13 @@
 
 <div class="pageTitle">
     &nbsp;&nbsp;<img src="images/right1.gif" align="middle"/> &nbsp;<span id="MainTitle" style="color:white">离岗管理&gt;&gt;
-        <c:if test="${paramsPost!=null && paramsPost.id!=0}">编辑</c:if>
-        <c:if test="${paramsPost==null || paramsPost.id==0}">添加</c:if>离岗信息</span>
+            <c:if test="${post!=null && post.id!=0}">编辑</c:if>
+            <c:if test="${post==null || post.id==0}">添加</c:if>离岗信息</span>
 </div>
 
 <form id="info" name="info" action="addPost" method="post">
 
-    <input type="hidden" id="paramsPost.post_id" name="id" value="${paramsPost.id}"/>
+    <input type="hidden" id="paramsPost.post_id" name="id" value="${post.id}"/>
 
     <table width="800" align="center" cellpadding="0" cellspacing="0" style="margin-top:10px;margin-bottom:10px;">
         <tr>
@@ -89,8 +90,8 @@
                     <TR>
                         <TD height="24" class="edittitleleft">&nbsp;</TD>
                         <TD class="edittitle">
-                            <c:if test="${paramsPost!=null && paramsPost.id!=0}">编辑</c:if>
-                            <c:if test="${paramsPost==null || paramsPost.id==0}">添加</c:if>离岗信息</span>
+                            <c:if test="${post!=null && post.id!=0}">编辑</c:if>
+                            <c:if test="${post==null || post.id==0}">添加</c:if>离岗信息</span>
                         </TD>
                         <TD class="edittitleright">&nbsp;</TD>
                     </TR>
@@ -107,7 +108,7 @@
                         <td width="35%" align="right" style="padding-right:5px"><font color="red">*</font> 离岗起始：</td>
                         <td width="65%">
                             <input type="date" name="postDate1" id="paramsPost.post_date1"
-                                   value="${paramsPost.postDate1Desc}" style="width:120px"/>
+                                   value="${post.postDate1Desc}" style="width:120px"/>
                         </td>
                     </tr>
                     <tr>
@@ -115,8 +116,14 @@
                         <td>
                             <select name="postLesson1" class="selectstyle" style="width: 100px">
                                 <option value="0">请选择</option>
-                                <option value="1">上午</option>
-                                <option value="2">下午</option>
+                                <c:if test="${post.postLesson1 == 1}">
+                                    <option value="1" selected>上午</option>
+                                    <option value="2">下午</option>
+                                </c:if>
+                                <c:if test="${post.postLesson1 == 2}">
+                                    <option value="1">上午</option>
+                                    <option value="2" selected>下午</option>
+                                </c:if>
                             </select>
                         </td>
                     </tr>
@@ -124,7 +131,7 @@
                         <td align="right" style="padding-right:5px"><font color="red">*</font> 离岗截止：</td>
                         <td>
                             <input type="date" name="postDate2" id="paramsPost.post_date2"
-                                   value="${paramsPost.postDate2Desc}" style="width:120px"/>
+                                   value="${post.postDate2Desc}" style="width:120px"/>
                         </td>
                     </tr>
                     <tr>
@@ -132,8 +139,14 @@
                         <td>
                             <select name="postLesson2" class="selectstyle" style="width: 100px">
                                 <option value="0">请选择</option>
-                                <option value="1">上午</option>
-                                <option value="2">下午</option>
+                                <c:if test="${post.postLesson2 == 1}">
+                                    <option value="1" selected>上午</option>
+                                    <option value="2">下午</option>
+                                </c:if>
+                                <c:if test="${post.postLesson2 == 2}">
+                                    <option value="1">上午</option>
+                                    <option value="2" selected>下午</option>
+                                </c:if>
                             </select>
                         </td>
                     </tr>
@@ -141,7 +154,7 @@
                         <td align="right" style="padding-right:5px"><font color="red">*</font> 离岗原因：</td>
                         <td>
                             <input type="text" name="postReason" id="paramsPost.post_reason"
-                                   value="${paramsPost.postReason}">
+                                   value="${post.postReason}">
                         </td>
                     </tr>
                 </table>
@@ -152,10 +165,10 @@
                 <table width="100%" align="center" cellpadding="0" cellspacing="0" class="editbody">
                     <tr class="editbody">
                         <td align="center" height="30">
-                            <c:if test="${paramsPost!=null && paramsPost.id!=0}">
+                            <c:if test="${post!=null && post.id!=0}">
                                 <input type="button" id="editBtn" Class="btnstyle" value="编 辑"/>
                             </c:if>
-                            <c:if test="${paramsPost==null || paramsPost.id==0}">
+                            <c:if test="${post==null || post.id==0}">
                                 <input type="button" id="addBtn" Class="btnstyle" value="添 加"/>
                             </c:if>
                             &nbsp;<label style="color:red">${errTip}</label>

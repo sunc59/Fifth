@@ -3,7 +3,9 @@ package com.sunc.cwy.controller.admin;
 import com.sunc.cwy.controller.common.BaseController;
 import com.sunc.cwy.model.User;
 import com.sunc.cwy.service.UserService;
+import com.sunc.cwy.util.Md5;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +13,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  * 个人中心信息控制器
+ *
  * @author sunc
  */
+@Controller
 public class UserCenterController extends BaseController {
 
 
@@ -24,15 +28,15 @@ public class UserCenterController extends BaseController {
      * @return String
      * @Title: saveAdmin
      * @Description: 保存修改个人信息
-     * 数据
-     *  -id-realName-userSex
+     * 数据：-id -realName -userSex
      */
-    @RequestMapping("/admin/saveAdmin")
+    @RequestMapping("/admin/saveUserInfo")
     public String saveAdmin(User paramsUser, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
-        User user = userService.getUser(paramsUser);
+        User user = userService.getUserById(paramsUser.getId());
+
         user.setRealName(paramsUser.getRealName());
         user.setUserSex(paramsUser.getUserSex());
 
@@ -42,11 +46,9 @@ public class UserCenterController extends BaseController {
                 return "loginTip";
             }
             // 保存修改个人信息
-            User admin = userService.saveUser(user);
+            User admin = userService.saveUserInfo(user);
 
             // 更新session
-            System.out.println(admin);
-
             if (admin != null) {
                 session.setAttribute("admin", admin);
             }
@@ -70,13 +72,16 @@ public class UserCenterController extends BaseController {
      * @return String
      * @Title: saveAdminPass
      * @Description: 保存修改个人密码
-     * 数据
-     *  -id-userPass
+     * 数据：-id -userPass
      */
-    @RequestMapping("/admin/saveAdminPass")
+    @RequestMapping("/admin/saveUserPass")
     public String saveAdminPass(User paramsUser, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
+
+        User user = userService.getUserById(paramsUser.getId());
+
+        user.setUserPass(Md5.makeMd5(paramsUser.getUserPass()));
 
         try {
             // 验证用户会话是否失效
@@ -84,12 +89,13 @@ public class UserCenterController extends BaseController {
                 return "loginTip";
             }
             // 保存修改个人密码
-            User admin = userService.saveUser(paramsUser);
+            User admin = userService.saveUserPass(user);
 
             // 更新session
             if (admin != null) {
                 session.setAttribute("admin", admin);
             }
+
             setSuccessTip("修改成功", "modifyPwd.jsp", session);
 
         } catch (Exception e) {

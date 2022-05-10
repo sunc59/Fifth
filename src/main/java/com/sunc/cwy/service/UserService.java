@@ -232,4 +232,36 @@ public class UserService {
 
         return page;
     }
+
+
+    /**
+     * 用户中心保存个人信息
+     *
+     * @param user
+     * @return
+     */
+    public User saveUserInfo(User user) {
+
+        userMapper.updateById(user);
+        User u = userMapper.selectById(user.getId());
+        // 填充部门信息
+        Dept dept = deptMapper.selectById(u.getDeptId());
+        u.setDept(dept);
+        return u;
+    }
+
+    /**
+     * 用户中心保存个人密码
+     * @param user
+     * @return
+     */
+    public User saveUserPass(User user) {
+
+        userMapper.updateById(user);
+        User u = userMapper.selectById(user.getId());
+        // 填充部门信息
+        Dept dept = deptMapper.selectById(u.getDeptId());
+        u.setDept(dept);
+        return u;
+    }
 }

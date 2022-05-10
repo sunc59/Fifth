@@ -33,7 +33,7 @@
     &nbsp;&nbsp;<img src="images/right1.gif" align="middle"/> &nbsp;<span id="MainTitle" style="color:white">个人中心&gt;&gt;个人信息</span>
 </div>
 
-<form id="info" name="info" action="saveAdmin" method="post">
+<form id="info" name="info" action="saveUserInfo" method="post">
 
     <input type="hidden" name="id" value="${admin.id}"/>
 
@@ -61,7 +61,11 @@
                         <td width="15%" align="right" style="padding-right:5px">
                             <c:if test="${admin.userType==1}">员工编号：</c:if>
                         </td>
-                        <td width="35%"><c:if test="${admin.userType==1}">${admin.userNo}</c:if></td>
+                        <td width="35%">
+                            <c:if test="${admin.userType==1}">
+                                ${admin.userNo}
+                            </c:if>
+                        </td>
                     </tr>
                     <tr>
                         <td align="right" style="padding-right:5px"><font color="red">*</font> 姓名：</td>

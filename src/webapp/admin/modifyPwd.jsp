@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -34,8 +34,10 @@
 <div class="pageTitle">
     &nbsp;&nbsp;<img src="images/right1.gif" align="middle"/> &nbsp;<span id="MainTitle" style="color:white">个人中心&gt;&gt;修改密码</span>
 </div>
-<form id="info" name="info" action="saveAdminPass" method="post">
+<form id="info" name="info" action="saveUserPass" method="post">
+
     <input type="hidden" name="id" value="${admin.id}"/>
+
     <table width="800" align="center" cellpadding="0" cellspacing="0" style="margin-top:10px;margin-bottom:10px;">
         <tr>
             <td height="24">
